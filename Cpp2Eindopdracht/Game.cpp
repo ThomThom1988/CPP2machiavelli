@@ -30,11 +30,7 @@ void Game::startGame()
 		auto other = getOtherPlayer(x);
 		x->get_socket().write("Je speelt het spel tegen: " + other->get_player().get_name() + "\r\n");
 	}
-	auto oldestPlayer = std::max_element(players.begin(),players.end(), [](const std::shared_ptr<ClientInfo> &a, const std::shared_ptr<ClientInfo> &b)
-	{
-		return a.get()->get_player().get_age() < b.get()->get_player().get_age();
-	});
-	king = std::distance(players.begin(), std::find(players.begin(), players.end(), oldestPlayer));
+	king = players[0]->get_player().get_age() >= players[1]->get_player().get_age() ? 0 : 1;
 	printKingInfo();
 	std::shuffle(drawBuildings.begin(), drawBuildings.end(), std::default_random_engine{});
 	std::shuffle(drawCharacters.begin(), drawCharacters.end(), std::default_random_engine{});
