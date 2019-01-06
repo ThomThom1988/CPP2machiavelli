@@ -21,9 +21,11 @@ public:
 	void roundSetup();
 	void cheatSetup();
 	void printKingInfo();
+	void printOtherInfo(const std::shared_ptr<ClientInfo> asker);
 	bool drawCards(const int amount, const std::shared_ptr<ClientInfo> player);
 	bool chooseCharacter(const int character, const std::shared_ptr<ClientInfo> player);
 	bool discardCharacter(const int disposedCharacter);
+	void resetCharacters();
 	void addBuildingToDraw(std::unique_ptr<Card> card) { drawBuildings.push_back(std::move(card)); }
 	void addCharacterToDraw(std::unique_ptr<Card> card) { drawCharacters.push_back(std::move(card)); }
 	void addBuildingToDiscard(std::unique_ptr<Card> card) { discardedBuildings.push_back(std::move(card)); }

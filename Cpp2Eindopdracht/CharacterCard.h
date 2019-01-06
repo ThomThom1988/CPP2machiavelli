@@ -12,7 +12,8 @@ public:
 	const Player& get_player() const { return player; }
 	const bool& canExecuteBothPowers() const{ return executeBothPowers; }
 	const int& maxBuildingsInTurn() const { return amountOfBuildingCards; }
-	void set_Player(const Player playerInThisRound) { player = playerInThisRound; };
+	void set_Player(const Player playerInThisRound) { player = playerInThisRound; }
+	void reset_player() { player.set_name(""); }
 	friend std::istream & operator>>(std::istream & is, CharacterCard & c);
 	friend std::ostream & operator<<(std::ostream & os, CharacterCard & c);
 

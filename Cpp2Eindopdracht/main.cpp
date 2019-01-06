@@ -45,13 +45,29 @@ void consume_command(Game *game) // runs in its own thread
 				auto otherPlayer = game->getOtherPlayer(clientInfo);
 
                 try {
-	                if (game->getCurrentPlayer() == clientInfo)
+					if (command.get_cmd() == "help")
+					{
+						client << "Basis van een beurt:\r\n"
+							<< "Pak 2 goudstukken of pak 2 kaarten en leg daar 1 van terug.\r\n"
+							<< "Leg 1 bouwkaart neer en betaal de waarde.\r\n"
+							<< "Een karaktereigenschap is op elk moment te gebruiken.\r\n"
+							<< "\r\n"
+							<< "Karakterss:\r\n"
+							<< "1: Moordenaar, vermoord een ander karakter.\r\n"
+							<< "2: Dief, steelt van een andere speler.\r\n"
+							<< "3: Magiër, ruilt bouwkaarten om.\r\n"
+							<< "4: Koning, begint de volgende ronde en ontvangt van monumenten.\r\n"
+							<< "5: Prediker, is beschermd tegen condotière en ontvangt van kerkelijke gebouwen.\r\n"
+							<< "6: Koopman, ontvangt 1 extra goudstuk en ontvangt van commerciële gebouwen.\r\n"
+							<< "7: Bouwmeester, trekt 2 extra kaarten en mag 3 gebouwen bouwen.\r\n"
+							<< "8: Condotière, vernietigd een gebouw en ontvangt van militaire gebouwen.\r\n"
+							<< machiavelli::prompt;
+					}
+	                else if (game->getCurrentPlayer() == clientInfo)
 	                {
-						// TODO handle command here
-						client << player.get_name() << ", you wrote: '" << command.get_cmd() << "', but I'll ignore that for now.\r\n" << machiavelli::prompt;
-						otherPlayer.get()->get_socket() << player.get_name() << " wrote " << command.get_cmd() << "', but I'll ignore that for now.\r\n" << machiavelli::prompt;
+						//commands
 	                }
-	                else client << "Jouw tegenstander is aan de beurt.\r\n" << machiavelli::prompt;
+	                else client << "Je tegenstander is aan de beurt.\r\n" << machiavelli::prompt;
                     
 
                 } catch (const exception& ex) {
@@ -73,8 +89,8 @@ void consume_command(Game *game) // runs in its own thread
 }
 
 std::shared_ptr<ClientInfo> init_client_session(Socket client) {
-    client.write("Welcome to Server 1.0! To quit, type 'quit'.\r\n");
-    client.write("What's your name?\r\n");
+    client.write("Welkom op de server! Stop het spel met 'quit'.\r\n");
+    client.write("Wat is jouw naam?\r\n");
     client.write(machiavelli::prompt);
     string name;
     bool done { false };
@@ -83,7 +99,7 @@ std::shared_ptr<ClientInfo> init_client_session(Socket client) {
             name = input;
         });
     }
-	client.write("What's your age?\r\n");
+	client.write("Hoe oud ben je?(oudste begint)\r\n");
 	client.write(machiavelli::prompt);
 	int age;
 	done = false;
@@ -96,7 +112,7 @@ std::shared_ptr<ClientInfo> init_client_session(Socket client) {
 		}
 		catch (...)
 		{
-			client.write("What's your age?\r\n");
+			client.write("Hoe oud ben je?(oudste begint)\r\n");
 			client.write(machiavelli::prompt);
 		}
 		
@@ -111,7 +127,7 @@ void handle_client(Socket client, Game *game) // this function runs in a separat
         auto &socket = client_info->get_socket();
         auto &player = client_info->get_player();
 		game->addPlayer(client_info);
-        socket << "Welcome, " << player.get_name() << ", have fun playing our game!\r\n" << machiavelli::prompt;
+        socket << "Welkom, " << player.get_name() << ", veel plezier met machiavelli!\r\n" << machiavelli::prompt;
 	    if (game->amountOfPlayers() >= 2)
 	    {
 			game->startGame();
@@ -125,7 +141,7 @@ void handle_client(Socket client, Game *game) // this function runs in a separat
                     cerr << '[' << socket.get_dotted_ip() << " (" << socket.get_socket() << ") " << player.get_name() << "] " << cmd << "\r\n";
 
                     if (cmd == "quit") {
-                        socket.write("Bye!\r\n");
+                        socket.write("Houdoe!\r\n");
 						auto otherPlayer = game->getOtherPlayer(client_info);
 						otherPlayer.get()->get_socket() << client_info->get_player().get_name() << " heeft het spel verlaten.\n" << machiavelli::prompt;
 						

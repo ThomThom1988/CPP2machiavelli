@@ -45,6 +45,7 @@
     <ClCompile Include="CardProperty.cpp" />
     <ClCompile Include="CharacterCard.cpp" />
     <ClCompile Include="CharacterProperty.cpp" />
+    <ClCompile Include="ClientInfo.cpp" />
     <ClCompile Include="Fileparser.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />

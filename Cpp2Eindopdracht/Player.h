@@ -20,6 +20,7 @@ public:
 	int get_age() const { return age; }
 	void set_name(const std::string& new_name) { name = new_name; }
 	void addGold(const int amount) { goldPieces += amount; }
+	int get_gold() const { return goldPieces; }
 
 private:
 	std::string name;

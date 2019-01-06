@@ -26,8 +26,14 @@ public:
     const Socket& get_socket() const { return _socket; }
     Player& get_player() { return _player; }
     const Player& get_player() const { return _player; }
-	//void addCard(const std::unique_ptr<Card> card) { hand.push_back(std::move(card)); }
-	//void addBuilding(const std::unique_ptr<Card> card) { buildings.push_back(std::move(card)); }
+	const std::vector<std::unique_ptr<Card>>& get_buildings() const { return buildings; }
+	void addCard(std::unique_ptr<Card> card) { hand.push_back(std::move(card)); }
+	bool addBuilding(std::unique_ptr<Card> card);
+	void printInfo();
+	void printHand();
+	void printBuildings();
+	//void printOptions();
+	void printGold();
 };
 
 
