@@ -2,9 +2,15 @@
 #include <algorithm>
 #include "Fileparser.h"
 #include <random>
-#include "CharacterCard.h"
 #include <iterator>
-#include "Turn.h"
+#include "Characters/Killer.h"
+#include "Characters/Thief.h"
+#include "Characters/Magician.h"
+#include "Characters/King.h"
+#include "Characters/Preacher.h"
+#include "Characters/Merchand.h"
+#include "Characters/Builder.h"
+#include "Characters/Condottiere.h"
 
 Game::~Game()
 {
@@ -33,7 +39,10 @@ void Game::startGame()
 	}
 	king = players[0]->get_player().get_age() >= players[1]->get_player().get_age() ? 0 : 1;
 	printKingInfo();
-	for (auto &x : players) drawCards(4, x);
+	for (auto &x : players) {
+		drawCards(4, x);
+		x->get_player().addGold(2);
+	}
 	//roundSetup();
 	cheatSetup();
 	resetCharacters();
@@ -42,6 +51,8 @@ void Game::startGame()
 bool Game::allCharactersChosen()
 {
 	bool result = true;
+	CharacterCard card;
+	auto a = card.get_name();
 	for (auto &character : characters) if (!character->is_discarded()) result = false;
 	return result;
 }
@@ -115,27 +126,59 @@ void Game::startTurn(std::string character)
 		std::find_if(characters.begin(), characters.end(),
 			[&](std::unique_ptr<CharacterCard> & obj) { return obj->get_name() == character; }
 	);
-	if (object->get() == nullptr || object->get()->get_name() == killedCharacter)
+	if (object->get() == nullptr || character == killedCharacter)
 	{
 		for (auto &x : players) x->get_socket() << "De " << character << "komt deze ronde niet aan de beurt.\r\n";
 	}
 	else
 	{
-		Turn turn(*object->get());
+		if (object->get()->get_player() != players[currentPlayer]) changePlayer();
+		std::unique_ptr<Character> turn;
+		//characters
+		switch (object->get()->get_value())
+		{
+		case 1:
+			turn = std::make_unique<Killer>(*object->get(), *this);
+			break;
+		case 2:
+			turn = std::make_unique<Thief>(*object->get(), *this);
+			break;
+		case 3:
+			turn = std::make_unique<Magician>(*object->get(), *this);
+			break;
+		case 4:
+			turn = std::make_unique<King>(*object->get(), *this);
+			king = currentPlayer;
+			break;
+		case 5:
+			turn = std::make_unique<Preacher>(*object->get(), *this);
+			break;
+		case 6:
+			turn = std::make_unique<Merchand>(*object->get(), *this);
+			break;
+		case 7:
+			turn = std::make_unique<Builder>(*object->get(), *this);
+			break;
+		case 8:
+			turn = std::make_unique<Condottiere>(*object->get(), *this);
+			break;
+		default:
+			turn = std::make_unique<Killer>(*object->get(), *this);
+			break;
+		}
+		turn->addStandardChoices();
+		turn->setupChoices();
+		//buildings
 
+		turn->executeTurn();
 	}
 }
 
 void Game::startRound()
 {
-	startTurn("Moordenaar");
-	startTurn("Dief");
-	startTurn("Magiër");
-	startTurn("Koning");
-	startTurn("Prediker");
-	startTurn("Koopman");
-	startTurn("Bouwmeester");
-	startTurn("Condottière");
+	for (auto &character : characters) {
+		startTurn(character->get_name());
+	}
 	if (gameEnded)
 	{
 		endGame();

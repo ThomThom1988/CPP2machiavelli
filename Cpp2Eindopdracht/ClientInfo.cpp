@@ -12,7 +12,6 @@ void ClientInfo::printInfo()
 	printGold();
 	printBuildings();
 	printHand();
-	//printOptions();
 }
 
 void ClientInfo::printHand()
@@ -28,10 +27,6 @@ void ClientInfo::printBuildings()
 	if (buildings.empty()) _socket << "Je hebt nog geen gebouwen geplaatst.\r\n";
 	//else for (auto &x : hand) _socket << x.get() << "\r\n";
 }
-
-//void ClientInfo::printOptions()
-//{
-//}
 
 void ClientInfo::printGold()
 {

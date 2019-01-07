@@ -23,11 +23,21 @@
     <ClInclude Include="Card.h" />
     <ClInclude Include="CardProperty.h" />
     <ClInclude Include="CharacterCard.h" />
+    <ClInclude Include="Characters\Builder.h" />
+    <ClInclude Include="Characters\Character.h" />
+    <ClInclude Include="Characters\Condottiere.h" />
+    <ClInclude Include="Characters\Killer.h" />
+    <ClInclude Include="Characters\King.h" />
+    <ClInclude Include="Characters\Magician.h" />
+    <ClInclude Include="Characters\Merchand.h" />
+    <ClInclude Include="Characters\Preacher.h" />
+    <ClInclude Include="Characters\Thief.h" />
     <ClInclude Include="CircularBuffer.h" />
     <ClInclude Include="ClientCommand.h" />
     <ClInclude Include="ClientInfo.h" />
     <ClInclude Include="Fileparser.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Properties\Build.h" />
     <ClInclude Include="Properties\ColorBonus.h" />
     <ClInclude Include="Properties\Destroy.h" />
     <ClInclude Include="Properties\DrawCards.h" />
@@ -42,13 +52,19 @@
     <ClInclude Include="Sync_queue.h" />
     <ClInclude Include="Properties\Thief.h" />
     <ClInclude Include="throw.h" />
-    <ClInclude Include="Turn.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BuildingCard.cpp" />
     <ClCompile Include="Card.cpp" />
-    <ClCompile Include="CardProperty.cpp" />
     <ClCompile Include="CharacterCard.cpp" />
+    <ClCompile Include="Characters\Builder.cpp" />
+    <ClCompile Include="Characters\Character.cpp" />
+    <ClCompile Include="Characters\Condottiere.cpp" />
+    <ClCompile Include="Characters\Killer.cpp" />
+    <ClCompile Include="Characters\King.cpp" />
+    <ClCompile Include="Characters\Magician.cpp" />
+    <ClCompile Include="Characters\Merchand.cpp" />
+    <ClCompile Include="Characters\Preacher.cpp" />
     <ClCompile Include="ClientInfo.cpp" />
     <ClCompile Include="Fileparser.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -58,9 +74,8 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Round.cpp" />
     <ClCompile Include="Socket.cpp" />
-    <ClCompile Include="Properties\Thief.cpp" />
+    <ClCompile Include="Characters\Thief.cpp" />
     <ClCompile Include="throw.cpp" />
-    <ClCompile Include="Turn.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
