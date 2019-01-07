@@ -3,43 +3,56 @@
 #include "Socket.h"
 #include "ClientInfo.h"
 #include "Fileparser.h"
+#include "BuildingCard.h"
+#include "CharacterCard.h"
+
+namespace machiavelli {
+	const int tcp_port{ 1080 };
+	const std::string prompt{ "machiavelli> " };
+}
 
 class Game
 {
 public:
-	Game() : currentRound{0}, gameEnded{ false }
-	{Fileparser parser;
-		drawCharacters = parser.readCharacterCards();
-	drawBuildings = parser.readBuildingCards(); }
+	Game() : currentRound{ 0 }, gameEnded{ false }, gameRunning{false}	{
+		Fileparser parser;
+		characters = parser.readCharacterCards();
+		buildings = parser.readBuildingCards(); 
+	}
 	~Game();
 	void addPlayer(const std::shared_ptr<ClientInfo> player) { players.push_back(player); }
-	int amountOfPlayers() { return players.size(); }
-	std::shared_ptr<ClientInfo> getCurrentPlayer() { return players.at(currentPlayer); }
-	std::shared_ptr<ClientInfo> getOtherPlayer(const std::shared_ptr<ClientInfo>);
+	int amountOfPlayers() const { return players.size(); }
+	std::shared_ptr<ClientInfo> getCurrentPlayer() const { return players.at(currentPlayer); }
+	std::shared_ptr<ClientInfo> getOtherPlayer(const std::shared_ptr<ClientInfo>) const;
 	void changePlayer();
 	void startGame();
+	bool allCharactersChosen();
 	void roundSetup();
 	void cheatSetup();
+	void startTurn(std::string character);
+	void startRound();
+	void endGame();
 	void printKingInfo();
 	void printOtherInfo(const std::shared_ptr<ClientInfo> asker);
 	bool drawCards(const int amount, const std::shared_ptr<ClientInfo> player);
 	bool chooseCharacter(const int character, const std::shared_ptr<ClientInfo> player);
 	bool discardCharacter(const int disposedCharacter);
+	bool getGameRunning() const { return gameRunning; }
 	void resetCharacters();
-	void addBuildingToDraw(std::unique_ptr<Card> card) { drawBuildings.push_back(std::move(card)); }
-	void addCharacterToDraw(std::unique_ptr<Card> card) { drawCharacters.push_back(std::move(card)); }
-	void addBuildingToDiscard(std::unique_ptr<Card> card) { discardedBuildings.push_back(std::move(card)); }
-	void addCharacterToDiscard(std::unique_ptr<Card> card) { discardedCharacters.push_back(std::move(card)); }
+	void addBuildingToDraw(std::unique_ptr<BuildingCard> card) { buildings.push_back(std::move(card)); }
+	void addCharacterToDraw(std::unique_ptr<CharacterCard> card) { characters.push_back(std::move(card)); }
+	void showCharacterChoices();
 
 private:
 	std::vector<std::shared_ptr<ClientInfo>> players;
-	std::vector<std::unique_ptr<Card>> drawBuildings;
-	std::vector<std::unique_ptr<Card>> discardedBuildings;
-	std::vector<std::unique_ptr<Card>> drawCharacters;
-	std::vector<std::unique_ptr<Card>> discardedCharacters;
+	std::vector<std::unique_ptr<BuildingCard>> buildings;
+	std::vector<std::unique_ptr<CharacterCard>> characters;
 	int currentPlayer;
 	int currentRound;
 	int king;
+	std::string killedCharacter;
+	std::string goldStolenCharacter;
 	bool gameEnded;
+	bool gameRunning;
 };
 

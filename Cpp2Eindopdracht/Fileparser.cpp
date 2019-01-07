@@ -13,10 +13,10 @@ Fileparser::~Fileparser()
 {
 }
 
-std::vector<std::unique_ptr<Card>> Fileparser::readCharacterCards()
+std::vector<std::unique_ptr<CharacterCard>> Fileparser::readCharacterCards()
 {
 	std::ifstream fileStream;
-	std::vector<std::unique_ptr<Card>> v;
+	std::vector<std::unique_ptr<CharacterCard>> v;
 	fileStream.open("karakterkaarten.csv");
 	while (!fileStream.eof())
 	{
@@ -28,10 +28,10 @@ std::vector<std::unique_ptr<Card>> Fileparser::readCharacterCards()
 	return v;
 }
 
-std::vector<std::unique_ptr<Card>> Fileparser::readBuildingCards()
+std::vector<std::unique_ptr<BuildingCard>> Fileparser::readBuildingCards()
 {
 	std::ifstream fileStream;
-	std::vector<std::unique_ptr<Card>> v;
+	std::vector<std::unique_ptr<BuildingCard>> v;
 	fileStream.open("Bouwkaarten.csv");
 	while (!fileStream.eof())
 	{

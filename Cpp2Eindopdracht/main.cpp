@@ -25,11 +25,6 @@ using namespace std;
 #include "Player.h"
 #include "ClientInfo.h"
 
-namespace machiavelli {
-    const int tcp_port {1080};
-    const string prompt {"machiavelli> "};
-}
-
 static bool running = true;
 
 static Sync_queue<ClientCommand> queue;
@@ -47,27 +42,15 @@ void consume_command(Game *game) // runs in its own thread
                 try {
 					if (command.get_cmd() == "help")
 					{
-						client << "Basis van een beurt:\r\n"
-							<< "Pak 2 goudstukken of pak 2 kaarten en leg daar 1 van terug.\r\n"
-							<< "Leg 1 bouwkaart neer en betaal de waarde.\r\n"
-							<< "Een karaktereigenschap is op elk moment te gebruiken.\r\n"
-							<< "\r\n"
-							<< "Karakterss:\r\n"
-							<< "1: Moordenaar, vermoord een ander karakter.\r\n"
-							<< "2: Dief, steelt van een andere speler.\r\n"
-							<< "3: Magiër, ruilt bouwkaarten om.\r\n"
-							<< "4: Koning, begint de volgende ronde en ontvangt van monumenten.\r\n"
-							<< "5: Prediker, is beschermd tegen condotière en ontvangt van kerkelijke gebouwen.\r\n"
-							<< "6: Koopman, ontvangt 1 extra goudstuk en ontvangt van commerciële gebouwen.\r\n"
-							<< "7: Bouwmeester, trekt 2 extra kaarten en mag 3 gebouwen bouwen.\r\n"
-							<< "8: Condotière, vernietigd een gebouw en ontvangt van militaire gebouwen.\r\n"
-							<< machiavelli::prompt;
+						
 					}
 	                else if (game->getCurrentPlayer() == clientInfo)
 	                {
 						//commands
 	                }
-	                else client << "Je tegenstander is aan de beurt.\r\n" << machiavelli::prompt;
+
+					
+					else client << "Opdracht niet herkent";
                     
 
                 } catch (const exception& ex) {
@@ -132,7 +115,6 @@ void handle_client(Socket client, Game *game) // this function runs in a separat
 	    {
 			game->startGame();
 	    }
-
         while (running) { // game loop
             try {
                 // read first line of request
@@ -151,8 +133,27 @@ void handle_client(Socket client, Game *game) // this function runs in a separat
                         running = false;
                     }
 
-                    ClientCommand command {cmd, client_info};
-                    queue.put(command);
+					else if (cmd == "help")
+					{
+						socket << "Basis van een beurt:\r\n"
+							<< "Pak 2 goudstukken of pak 2 kaarten en leg daar 1 van terug.\r\n"
+							<< "Leg 1 bouwkaart neer en betaal de waarde.\r\n"
+							<< "Een karaktereigenschap is op elk moment te gebruiken.\r\n"
+							<< "\r\n"
+							<< "Karakterss:\r\n"
+							<< "1: Moordenaar, vermoord een ander karakter.\r\n"
+							<< "2: Dief, steelt van een andere speler.\r\n"
+							<< "3: Magiër, ruilt bouwkaarten om.\r\n"
+							<< "4: Koning, begint de volgende ronde en ontvangt van monumenten.\r\n"
+							<< "5: Prediker, is beschermd tegen condotière en ontvangt van kerkelijke gebouwen.\r\n"
+							<< "6: Koopman, ontvangt 1 extra goudstuk en ontvangt van commerciële gebouwen.\r\n"
+							<< "7: Bouwmeester, trekt 2 extra kaarten en mag 3 gebouwen bouwen.\r\n"
+							<< "8: Condotière, vernietigd een gebouw en ontvangt van militaire gebouwen.\r\n"
+							<< machiavelli::prompt;
+					}
+
+                    //ClientCommand command {cmd, client_info};
+                    //queue.put(command);
                 };
 
             } catch (const exception& ex) {

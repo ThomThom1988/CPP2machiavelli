@@ -24,7 +24,7 @@ std::istream & operator>>(std::istream & is, CharacterCard & c)
 	return is;
 }
 
-std::ostream & operator<<(std::ostream & os, CharacterCard & c)
+const Socket & operator<<(Socket & s, CharacterCard & c)
 {
-	return os << c.get_name();
+	return s << "[" << c.get_value() << "] " << c.get_name();
 }

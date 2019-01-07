@@ -20,39 +20,45 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BuildingCard.h" />
-    <ClInclude Include="BuildingProperty.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="CardProperty.h" />
     <ClInclude Include="CharacterCard.h" />
-    <ClInclude Include="CharacterProperty.h" />
     <ClInclude Include="CircularBuffer.h" />
     <ClInclude Include="ClientCommand.h" />
     <ClInclude Include="ClientInfo.h" />
     <ClInclude Include="Fileparser.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Properties\ColorBonus.h" />
+    <ClInclude Include="Properties\Destroy.h" />
+    <ClInclude Include="Properties\DrawCards.h" />
+    <ClInclude Include="Properties\DrawCoins.h" />
+    <ClInclude Include="Properties\Murder.h" />
     <ClInclude Include="NewPlayer.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Properties\SwitchHand.h" />
+    <ClInclude Include="Properties\SwitchWithOther.h" />
     <ClInclude Include="Round.h" />
     <ClInclude Include="Socket.h" />
     <ClInclude Include="Sync_queue.h" />
+    <ClInclude Include="Properties\Thief.h" />
     <ClInclude Include="throw.h" />
     <ClInclude Include="Turn.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BuildingCard.cpp" />
-    <ClCompile Include="BuildingProperty.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="CardProperty.cpp" />
     <ClCompile Include="CharacterCard.cpp" />
-    <ClCompile Include="CharacterProperty.cpp" />
     <ClCompile Include="ClientInfo.cpp" />
     <ClCompile Include="Fileparser.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Properties\Murder.cpp" />
     <ClCompile Include="NewPlayer.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Round.cpp" />
     <ClCompile Include="Socket.cpp" />
+    <ClCompile Include="Properties\Thief.cpp" />
     <ClCompile Include="throw.cpp" />
     <ClCompile Include="Turn.cpp" />
   </ItemGroup>

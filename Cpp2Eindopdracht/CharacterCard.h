@@ -1,6 +1,7 @@
 #pragma once
 #include "Card.h"
 #include "Player.h"
+#include "ClientInfo.h"
 
 class CharacterCard :
 	public Card
@@ -9,17 +10,13 @@ public:
 	CharacterCard();
 	~CharacterCard();
 
-	const Player& get_player() const { return player; }
-	const bool& canExecuteBothPowers() const{ return executeBothPowers; }
-	const int& maxBuildingsInTurn() const { return amountOfBuildingCards; }
-	void set_Player(const Player playerInThisRound) { player = playerInThisRound; }
-	void reset_player() { player.set_name(""); }
+	const std::shared_ptr<ClientInfo>& get_player() const { return player; }
+	void set_Player(const std::shared_ptr<ClientInfo> playerInThisRound) { player = playerInThisRound; }
+	void reset_player() { player = nullptr; }
 	friend std::istream & operator>>(std::istream & is, CharacterCard & c);
-	friend std::ostream & operator<<(std::ostream & os, CharacterCard & c);
+	friend const Socket & operator<<(Socket & s, CharacterCard & c);
 
 private:
-	Player player;
-	bool executeBothPowers;
-	int amountOfBuildingCards;
+	std::shared_ptr<ClientInfo> player;
 };
 
