@@ -11,6 +11,8 @@ namespace machiavelli {
 	const std::string prompt{ "machiavelli> " };
 }
 
+//class CardProperty;
+
 class Game
 {
 public:
@@ -33,7 +35,6 @@ public:
 	void startRound();
 	void endGame();
 	void printKingInfo();
-	void printOtherInfo(const std::shared_ptr<ClientInfo> asker);
 	bool drawCards(const int amount, const std::shared_ptr<ClientInfo> player);
 	bool chooseCharacter(const int character, const std::shared_ptr<ClientInfo> player);
 	bool discardCharacter(const int disposedCharacter);

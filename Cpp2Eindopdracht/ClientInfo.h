@@ -13,12 +13,13 @@
 
 #include "Socket.h"
 #include "Player.h"
+#include "BuildingCard.h"
 
 class ClientInfo {
     Socket _socket;
     Player _player;
-	std::vector<std::unique_ptr<Card>> hand;
-	std::vector<std::unique_ptr<Card>> buildings;
+	std::vector<std::unique_ptr<BuildingCard>> hand;
+	std::vector<std::unique_ptr<BuildingCard>> buildings;
 public:
     ClientInfo(Socket socket, Player player)
         : _socket{std::move(socket)}, _player{player}{}
@@ -27,13 +28,13 @@ public:
     Player& get_player() { return _player; }
     const Player& get_player() const { return _player; }
 	//const std::vector<std::unique_ptr<Card>>& get_buildings() const { return buildings; }
-	void addCard(std::unique_ptr<Card> card) { hand.push_back(std::move(card)); }
-	bool addBuilding(std::unique_ptr<Card> card);
+	void addCard(std::unique_ptr<BuildingCard> card) { hand.push_back(std::move(card)); }
+	bool addBuilding(std::unique_ptr<BuildingCard> card);
 	void printInfo();
 	void printHand();
-	void printBuildings();
+	void printBuildings(Socket& socket);
 	//void printOptions();
-	void printGold();
+	void printGold(Socket& socket);
 };
 
 

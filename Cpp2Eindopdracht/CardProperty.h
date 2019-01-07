@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
-class Game;
-class CharacterCard;
+//#include "Game.h"
 
 class CardProperty
 {
@@ -14,7 +13,5 @@ private:
 	bool used;
 protected:
 	std::string description;
-	CharacterCard* character;
-	Game* game;
 };
 

@@ -63,9 +63,6 @@
     <ClInclude Include="Properties\Murder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Properties\Thief.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Properties\SwitchHand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -112,6 +109,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Properties\Build.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Properties\Steal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -52,8 +52,8 @@ std::istream & operator>>(std::istream & is, BuildingCard & c)
 	return is;
 }
 
-std::ostream & operator<<(std::ostream & os, BuildingCard & c)
+const Socket & operator<<(Socket & s, BuildingCard & c)
 {
-	if (c.get_description() != "") return os << c.get_name() << "(" << c.get_value() << ", " << c.get_color() << ", " << c.get_description() << ")";
-	return os << c.get_name() << "(" << c.get_value() << ", " << c.get_color() << ")";
+	if (c.get_description() != "") return s << c.get_name() << "(" << c.get_value() << ", " << c.get_color() << ", " << c.get_description() << ")";
+	return s << c.get_name() << "(" << c.get_value() << ", " << c.get_color() << ")";
 }

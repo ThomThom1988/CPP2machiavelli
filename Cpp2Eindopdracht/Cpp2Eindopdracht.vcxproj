@@ -50,7 +50,7 @@
     <ClInclude Include="Round.h" />
     <ClInclude Include="Socket.h" />
     <ClInclude Include="Sync_queue.h" />
-    <ClInclude Include="Properties\Thief.h" />
+    <ClInclude Include="Properties\Steal.h" />
     <ClInclude Include="throw.h" />
   </ItemGroup>
   <ItemGroup>

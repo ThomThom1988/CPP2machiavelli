@@ -8,6 +8,7 @@ void Character::executeTurn()
 	int choice;
 	bool done{ false };
 	while (!done) {
+		character->get_player()->printInfo();
 		bool nextChoise{ false };
 		while (!nextChoise)
 		{
@@ -17,6 +18,11 @@ void Character::executeTurn()
 					if (input == "klaar")
 					{
 						done = true;
+					}
+					else if (input == "tegenstander")
+					{
+						game->getOtherPlayer(character->get_player())->printBuildings(character->get_player()->get_socket());
+						game->getOtherPlayer(character->get_player())->printGold(character->get_player()->get_socket());
 					}
 					else
 					{
@@ -52,6 +58,7 @@ const Socket & operator<<(Socket & os, Character & c)
 		result += c.properties[i]->get_description();
 		result += "\r\n";
 	}
+	result += "[tegenstander] Bekijk jouw tegenstanders gebouwen en goud.\r\n";
 	result += "[klaar] Beëindig beurt.\r\n";
 	return os << result << machiavelli::prompt;
 }

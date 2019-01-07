@@ -1,6 +1,7 @@
 #pragma once
 #include "Card.h"
 #include <vector>
+#include "Socket.h"
 
 class BuildingCard :
 	public Card
@@ -14,6 +15,7 @@ public:
 	void set_color(const std::string cardColor) { color = cardColor; }
 	void set_description(const std::string cardDescription) { description = cardDescription; }
 	friend std::istream & operator>>(std::istream & is, BuildingCard & c);
+	friend const Socket & operator<<(Socket & s, BuildingCard & c);
 
 private:
 	std::string color;

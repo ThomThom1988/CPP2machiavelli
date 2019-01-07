@@ -6,7 +6,7 @@ class DrawCards :
 {
 public:
 	DrawCards(const int amount) : amount{amount} 
-	{ description = "Pak " + std::to_string(amount) + " kaart(en)."; }
+	{ description = "Pak " + std::to_string(amount) + " kaart(en) en leg er één af."; }
 	~DrawCards() {};
 	bool useProperty() override { return true; };
 private:

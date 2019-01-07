@@ -109,6 +109,9 @@ void Game::roundSetup()
 void Game::cheatSetup()
 {
 	currentRound++;
+	currentPlayer = king;
+	std::shuffle(buildings.begin(), buildings.end(), std::default_random_engine{});
+	std::shuffle(characters.begin(), characters.end(), std::default_random_engine{});
 	chooseCharacter(1, players.at(0));
 	chooseCharacter(2, players.at(0));
 	chooseCharacter(3, players.at(1));
@@ -126,7 +129,7 @@ void Game::startTurn(std::string character)
 		std::find_if(characters.begin(), characters.end(),
 			[&](std::unique_ptr<CharacterCard> & obj) { return obj->get_name() == character; }
 	);
-	if (object->get() == nullptr || character == killedCharacter)
+	if (object->get()->get_player() == nullptr || character == killedCharacter)
 	{
 		for (auto &x : players) x->get_socket() << "De " << character << "komt deze ronde niet aan de beurt.\r\n";
 	}
@@ -195,16 +198,6 @@ void Game::printKingInfo()
 	players.at(king)->get_socket().write("Je bent de koning.\r\n");
 	auto other = getOtherPlayer(players.at(king));
 	other->get_socket().write(kingsname + " is de koning.\r\n");
-}
-
-void Game::printOtherInfo(const std::shared_ptr<ClientInfo> asker)
-{
-	auto other = getOtherPlayer(asker);
-	asker->get_socket() << "Informatie over " << other->get_player().get_name() << ": \r\n"
-	<< "Goudstukken: " << other->get_player().get_gold() << ". \r\n" << "Gebouwen: \r\n";
-	//auto buildings = other->get_buildings();
-	//if (buildings.empty()) asker->get_socket() << "Je tegenstander heeft nog geen gebouwen.\r\n";
-	//else for (auto &x : buildings) asker->get_socket() << x.get() << "\r\n";
 }
 
 bool Game::drawCards(const int amount, const std::shared_ptr<ClientInfo> player)
