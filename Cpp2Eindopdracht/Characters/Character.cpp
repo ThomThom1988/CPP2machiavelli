@@ -9,12 +9,11 @@ void Character::executeTurn()
 	bool done{ false };
 	while (!done) {
 		character->get_player()->printInfo();
+		character->get_player()->get_socket() << "Je bent nu de " << character->get_name() << ".\r\n" << showChoices();
 		bool nextChoise{ false };
 		while (!nextChoise)
 		{
-			bool inputgotten{ false };
-			while (!inputgotten) {
-				inputgotten = character->get_player()->get_socket().readline([&choice, &done, this](std::string input) {
+				nextChoise = character->get_player()->get_socket().readline([&choice, &done, this](std::string input) {
 					if (input == "klaar")
 					{
 						done = true;
@@ -26,16 +25,18 @@ void Character::executeTurn()
 					}
 					else
 					{
-						try { choice = std::stoi(input); }
-						catch (...) { character->get_player()->get_socket() << "kies een juiste waarde." << machiavelli::prompt; }
+						try
+						{
+							choice = std::stoi(input);
+							properties.at(choice)->useProperty();
+						}
+						catch (...)
+						{
+							character->get_player()->get_socket() << "kies een juiste waarde." << machiavelli::prompt;
+						}
+						
 					}
-				});
-			}
-			if (!done)
-			{
-				nextChoise = properties[nextChoise]->useProperty();
-				if (!nextChoise) character->get_player()->get_socket() << "kies een juiste waarde." << machiavelli::prompt;
-			}
+				});			
 		}
 	}
 }
@@ -43,22 +44,24 @@ void Character::executeTurn()
 void Character::addStandardChoices()
 {
 	properties.push_back(std::make_unique<DrawCards>(*character, *game,2,1));
-	properties.push_back(std::make_unique<DrawCoins>(2));
-	properties.push_back(std::make_unique<Build>());
+	properties.push_back(std::make_unique<DrawCoins>(*character, *game, 2));
+	properties.push_back(std::make_unique<Build>(*character, *game,1));
 }
 
-const Socket & operator<<(Socket & os, Character & c)
+
+std::string Character::showChoices()
 {
 	std::string result;
-	for (int i = 0; i < c.properties.size(); i++)
+	result += "opties:\r\n";
+	for (int i = 0; i < properties.size(); i++)
 	{
 		result += "[";
 		result += std::to_string(i);
 		result += "] ";
-		result += c.properties[i]->get_description();
+		result += properties[i]->get_description();
 		result += "\r\n";
 	}
 	result += "[tegenstander] Bekijk jouw tegenstanders gebouwen en goud.\r\n";
 	result += "[klaar] Beëindig beurt.\r\n";
-	return os << result << machiavelli::prompt;
+	return result + machiavelli::prompt;
 }

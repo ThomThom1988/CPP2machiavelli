@@ -46,7 +46,7 @@
     <ClInclude Include="NewPlayer.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Properties\SwitchHand.h" />
-    <ClInclude Include="Properties\SwitchWithOther.h" />
+    <ClInclude Include="Properties\SwitchCards.h" />
     <ClInclude Include="Round.h" />
     <ClInclude Include="Socket.h" />
     <ClInclude Include="Sync_queue.h" />
@@ -69,11 +69,17 @@
     <ClCompile Include="Fileparser.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Properties\Build.cpp" />
+    <ClCompile Include="Properties\ColorBonus.cpp" />
+    <ClCompile Include="Properties\Destroy.cpp" />
     <ClCompile Include="Properties\DrawCards.cpp" />
     <ClCompile Include="Properties\DrawCoins.cpp" />
     <ClCompile Include="Properties\Murder.cpp" />
     <ClCompile Include="NewPlayer.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Properties\Steal.cpp" />
+    <ClCompile Include="Properties\SwitchCards.cpp" />
+    <ClCompile Include="Properties\SwitchHand.cpp" />
     <ClCompile Include="Round.cpp" />
     <ClCompile Include="Socket.cpp" />
     <ClCompile Include="Characters\Thief.cpp" />

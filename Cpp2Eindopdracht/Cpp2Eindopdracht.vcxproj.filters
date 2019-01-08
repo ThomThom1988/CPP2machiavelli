@@ -66,9 +66,6 @@
     <ClInclude Include="Properties\SwitchHand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Properties\SwitchWithOther.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Properties\ColorBonus.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -112,6 +109,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Properties\Steal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Properties\SwitchCards.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -186,6 +186,24 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Properties\DrawCards.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Properties\Build.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Properties\Steal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Properties\SwitchHand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Properties\SwitchCards.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Properties\ColorBonus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Properties\Destroy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

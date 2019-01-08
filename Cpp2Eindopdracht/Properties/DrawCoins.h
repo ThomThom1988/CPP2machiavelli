@@ -7,7 +7,7 @@ class DrawCoins :
 	public CardProperty
 {
 public:
-	DrawCoins(const int amount) : amount{amount} 
+	DrawCoins(CharacterCard& characterCard, Game& currentGame, const int amount) : amount{amount}, game{&currentGame}, card{&characterCard}
 	{ description = "Pak " + std::to_string(amount) + " goudstuk(ken)."; }
 	~DrawCoins() {};
 	bool useProperty() override;

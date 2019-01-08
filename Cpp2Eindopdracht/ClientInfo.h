@@ -27,14 +27,17 @@ public:
     const Socket& get_socket() const { return _socket; }
     Player& get_player() { return _player; }
     const Player& get_player() const { return _player; }
-	//const std::vector<std::unique_ptr<Card>>& get_buildings() const { return buildings; }
+	std::vector<std::unique_ptr<BuildingCard>> get_hand() { return std::move(hand); }
+	void set_hand(std::vector<std::unique_ptr<BuildingCard>> otherHand) { hand = std::move(otherHand); }
 	void addCard(std::unique_ptr<BuildingCard> card) { hand.push_back(std::move(card)); }
-	bool addBuilding(std::unique_ptr<BuildingCard> card);
+	bool addBuilding(int index);
 	void printInfo();
 	void printHand();
 	void printBuildings(Socket& socket);
-	//void printOptions();
 	void printGold(Socket& socket);
+	int getColorBonus(const std::string color);
+	std::vector<std::unique_ptr<BuildingCard>> discardCards();
+	std::unique_ptr<BuildingCard> destroyBuilding(std::shared_ptr<ClientInfo> player);
 };
 
 

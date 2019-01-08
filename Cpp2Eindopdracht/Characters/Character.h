@@ -9,7 +9,7 @@ public:
 	void executeTurn();
 	virtual void setupChoices() = 0;
 	void addStandardChoices();
-	friend const Socket & operator<<(Socket & os, Character & c);
+	std::string showChoices();
 protected:
 	std::vector<std::unique_ptr<CardProperty>> properties;
 	CharacterCard* character;
