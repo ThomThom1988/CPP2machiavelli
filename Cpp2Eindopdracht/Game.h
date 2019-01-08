@@ -34,6 +34,7 @@ public:
 	void startTurn(std::string character);
 	void startRound();
 	void endGame();
+	int calculateScore(std::shared_ptr<ClientInfo> player);
 	void printKingInfo();
 	bool drawCards(const int amount, const std::shared_ptr<ClientInfo> player);
 	bool chooseCharacter(const int character, const std::shared_ptr<ClientInfo> player);

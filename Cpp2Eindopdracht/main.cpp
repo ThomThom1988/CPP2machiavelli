@@ -126,10 +126,13 @@ void handle_client(Socket client, Game *game) // this function runs in a separat
                         socket.write("Houdoe!\r\n");
 						auto otherPlayer = game->getOtherPlayer(client_info);
 						otherPlayer.get()->get_socket() << client_info->get_player().get_name() << " heeft het spel verlaten.\n" << machiavelli::prompt;
-						
+
+						game->endGame();
+
                         break; // out of game loop, will end this thread and close connection
                     }
                     else if (cmd == "quit_server") {
+						game->endGame();
                         running = false;
                     }
 
