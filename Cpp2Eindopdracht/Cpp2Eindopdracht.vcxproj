@@ -69,6 +69,8 @@
     <ClCompile Include="Fileparser.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Properties\DrawCards.cpp" />
+    <ClCompile Include="Properties\DrawCoins.cpp" />
     <ClCompile Include="Properties\Murder.cpp" />
     <ClCompile Include="NewPlayer.cpp" />
     <ClCompile Include="Player.cpp" />

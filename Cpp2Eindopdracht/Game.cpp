@@ -40,7 +40,7 @@ void Game::startGame()
 	king = players[0]->get_player().get_age() >= players[1]->get_player().get_age() ? 0 : 1;
 	printKingInfo();
 	for (auto &x : players) {
-		drawCards(4, x);
+		drawCards(4, 0,x);
 		x->get_player().addGold(2);
 	}
 	//roundSetup();
@@ -179,6 +179,7 @@ void Game::startTurn(std::string character)
 
 void Game::startRound()
 {
+	std::sort(characters.begin(), characters.end(), [](std::unique_ptr<CharacterCard> & a, std::unique_ptr<CharacterCard> & b) {return a->get_value() < b->get_value(); });
 	for (auto &character : characters) {
 		startTurn(character->get_name());
 	}
@@ -200,17 +201,63 @@ void Game::printKingInfo()
 	other->get_socket().write(kingsname + " is de koning.\r\n");
 }
 
-bool Game::drawCards(const int amount, const std::shared_ptr<ClientInfo> player)
+bool Game::drawCards(const int amount, const int discard,const std::shared_ptr<ClientInfo> player)
 {
+	std::vector<std::unique_ptr<BuildingCard>> chosenbuildings;
+	std::vector<std::unique_ptr<BuildingCard>> discardedbuildings;
+
 	for (int i = 0; i < amount; i++)
 	{
 		if (buildings.front() != nullptr)
 		{
-			player->addCard(std::move(buildings.front()));
+			chosenbuildings.push_back(std::move(buildings.front()));
 			buildings.erase(buildings.begin());
 		}
-		else return false;
+		else return false;		
+	}
+	int j{ discard };
+	while(j > 0)
+	{
+		int index = 0;
+		for (auto &x : chosenbuildings)
+		{
+			if (x != nullptr) {
+				players[currentPlayer]->get_socket() << *x;
+			}
+			index++;
+		}
+		int chosenIndex;
+		bool done = false;
+		while (!done) {
+			bool inputgotten{ false };
+			while (!inputgotten) {
+				inputgotten = players[currentPlayer]->get_socket().readline([&chosenIndex, this](std::string input) {
+					try { chosenIndex = std::stoi(input); }
+					catch (...) { players[currentPlayer]->get_socket() << "kies een juiste waarde.\r\n" << machiavelli::prompt; }
+				});
+			}
+			try
+			{
+				std::unique_ptr<BuildingCard> choice{ std::move(chosenbuildings.at(chosenIndex)) };
+				discardedbuildings.push_back(std::move(choice));
+				done = true;
+			}
+			catch (...)
+			{
+			}
+			if (!done) players[currentPlayer]->get_socket() << "kies een juiste waarde.\r\n" << machiavelli::prompt;
+		}
+
 		
+		j--;
+	}
+	
+	for (auto &x : discardedbuildings) {
+		x->set_discarded(true);
+		buildings.push_back(std::move(x));
+	}
+	for (auto &x : chosenbuildings) {
+		if (x != nullptr) player->addCard(std::move(x));
 	}
 	return true;
 }

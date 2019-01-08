@@ -42,7 +42,7 @@ void Character::executeTurn()
 
 void Character::addStandardChoices()
 {
-	properties.push_back(std::make_unique<DrawCards>(2));
+	properties.push_back(std::make_unique<DrawCards>(*character, *game,2,1));
 	properties.push_back(std::make_unique<DrawCoins>(2));
 	properties.push_back(std::make_unique<Build>());
 }

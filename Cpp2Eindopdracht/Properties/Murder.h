@@ -15,6 +15,7 @@ public:
 	}
 	~Murder(){};
 	bool useProperty() override;
+private:
 	Game *game;
 	CharacterCard *card;
 };
