@@ -25,6 +25,7 @@ bool Build::useProperty()
 					{
 						done = true;
 						times--;
+						if (times == 0) setCanUse(false);
 					}
 					else{ card->get_player()->get_socket() << "Kies een gebouw in je hand die je kunt betalen.\r\n"; }
 				}

@@ -8,6 +8,6 @@ bool SwitchHand::useProperty()
 	otherhand = std::move(game->getOtherPlayer(game->getCurrentPlayer())->get_hand());
 	game->getCurrentPlayer()->set_hand(std::move(otherhand));
 	game->getOtherPlayer(game->getCurrentPlayer())->set_hand(std::move(hand));
-
+	setCanUse(false);
 	return true;
 }

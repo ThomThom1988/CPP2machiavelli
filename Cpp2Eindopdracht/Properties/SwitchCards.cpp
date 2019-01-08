@@ -8,5 +8,6 @@ bool SwitchCards::useProperty()
 		game->addBuildingToDraw(std::move(x));
 	}
 	game->drawCards(cards.size(), 0, game->getCurrentPlayer());
+	setCanUse(false);
 	return true;
 }

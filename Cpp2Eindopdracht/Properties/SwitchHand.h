@@ -7,7 +7,11 @@ class SwitchHand :
 {
 public:
 	SwitchHand(CharacterCard& characterCard, Game& currentGame) : card{ &characterCard }, game{ &currentGame }
-	{ description = "Wissel van hand met jouw tegenstander"; }
+	{ 
+		description = "Wissel van hand met jouw tegenstander"; 
+		canuse = true;
+		connectedDescription = "Wissel een aantal handkaarten om voor nieuwe gebouwenkaarten.";
+	}
 	~SwitchHand() {};
 	bool useProperty() override;
 private:

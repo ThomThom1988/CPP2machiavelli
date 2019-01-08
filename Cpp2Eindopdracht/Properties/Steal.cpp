@@ -19,7 +19,11 @@ bool Steal::useProperty()
 			card->get_player()->get_socket() << "Dit karakter kan je niet bestelen.\r\n";
 		else if (!game->characterExists(choice))
 			card->get_player()->get_socket() << "Dit karakter bestaat niet.\r\n";
-		else game->stealFromCharacter(choice); done = true;
+		else {
+			game->stealFromCharacter(choice);
+			done = true;
+			setCanUse(false);
+		}
 	}
 	return true;
 }

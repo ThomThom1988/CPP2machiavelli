@@ -107,14 +107,14 @@ void Game::cheatSetup()
 {
 	currentRound++;
 	currentPlayer = king;
-	chooseCharacter(7, players.at(0));
-	chooseCharacter(8, players.at(1));
+	chooseCharacter(1, players.at(0));
+	chooseCharacter(2, players.at(0));
+	chooseCharacter(3, players.at(1));
+	chooseCharacter(4, players.at(1));
 	discardCharacter(5);
 	discardCharacter(6);
-	discardCharacter(1);
-	discardCharacter(2);
-	discardCharacter(3);
-	discardCharacter(4);
+	discardCharacter(7);
+	discardCharacter(8);
 	startRound();
 }
 

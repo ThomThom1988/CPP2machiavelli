@@ -15,7 +15,7 @@ bool Murder::useProperty()
 				choice = input;
 			});
 		}
-		if (game->characterExists(choice) && choice != "Moordenaar") { game->murderCharacter(choice); done = true; }
+		if (game->characterExists(choice) && choice != "Moordenaar") { game->murderCharacter(choice); done = true; setCanUse(false); }
 		else { card->get_player()->get_socket() << "Dit karakter kan je niet vermoorden.\r\n"; }
 	}
 	return true;

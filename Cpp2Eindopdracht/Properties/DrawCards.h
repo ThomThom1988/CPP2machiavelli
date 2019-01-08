@@ -11,6 +11,8 @@ public:
 		description = "Pak " + std::to_string(amount) + " kaart(en) en leg er "+ std::to_string(discardAmount) +" af.";
 		card = &characterCard;
 		game = &currentGame;
+		canuse = true;
+		connectedDescription = "Pak 2 goudstuk(ken)";
 	}
 	~DrawCards() {};
 	bool useProperty() override;

@@ -2,6 +2,7 @@
 #include "../Properties/DrawCoins.h"
 #include "../Properties/DrawCards.h"
 #include "../Properties/Build.h"
+#include <algorithm>
 
 void Character::executeTurn()
 {
@@ -28,11 +29,17 @@ void Character::executeTurn()
 						try
 						{
 							choice = std::stoi(input);
-							properties.at(choice)->useProperty();
+							if (properties.at(choice)->canUse())
+							{
+								properties.at(choice)->useProperty();
+								if (!properties.at(choice)->getConnectedDescription().empty()) disableChoice(properties.at(choice)->getConnectedDescription());
+							}
+							else character->get_player()->get_socket() << "kies een juiste waarde.\r\n";
+							
 						}
 						catch (...)
 						{
-							character->get_player()->get_socket() << "kies een juiste waarde." << machiavelli::prompt;
+							character->get_player()->get_socket() << "kies een juiste waarde.\r\n";
 						}
 						
 					}
@@ -48,18 +55,34 @@ void Character::addStandardChoices()
 	properties.push_back(std::make_unique<Build>(*character, *game,1));
 }
 
+void Character::disableChoice(const std::string description)
+{
+	std::vector<std::unique_ptr<CardProperty>>::iterator object =
+		std::find_if(properties.begin(), properties.end(),
+			[&](std::unique_ptr<CardProperty> & obj) { return obj->get_description() == description; }
+	);
+	if (object != properties.end()) {
+		object->get()->setCanUse(false);
+	}
+}
+
 
 std::string Character::showChoices()
 {
 	std::string result;
 	result += "opties:\r\n";
-	for (int i = 0; i < properties.size(); i++)
+	int i{0};
+	for (auto &property : properties)
 	{
-		result += "[";
-		result += std::to_string(i);
-		result += "] ";
-		result += properties[i]->get_description();
-		result += "\r\n";
+		if (property->canUse())
+		{
+			result += "[";
+			result += std::to_string(i);
+			result += "] ";
+			result += property->get_description();
+			result += "\r\n";
+		}
+		i++;
 	}
 	result += "[tegenstander] Bekijk jouw tegenstanders gebouwen en goud.\r\n";
 	result += "[klaar] Beëindig beurt.\r\n";
