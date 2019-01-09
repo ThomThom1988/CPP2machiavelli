@@ -13,6 +13,7 @@
 
 Game::~Game()
 {
+	endGame();
 }
 
 std::shared_ptr<ClientInfo> Game::getOtherPlayer(std::shared_ptr<ClientInfo> player) const
@@ -198,6 +199,70 @@ void Game::startRound()
 
 void Game::endGame()
 {
+	int player1score = calculateScore(players[0]);
+	int player2score = calculateScore(players[1]);
+
+	if(player1score == player2score)
+	{
+		players[0]->get_socket() << "You have tied" << "\r\n";
+		players[0]->get_socket() << "Your score was " << player1score << "\r\n";
+
+		players[1]->get_socket() << "You have tied" << "\r\n";
+		players[1]->get_socket() << "Your score was " << player2score << "\r\n";
+	}
+	else if(player1score > player2score)
+	{
+		players[0]->get_socket() << "You have won" << "\r\n";
+		players[0]->get_socket() << "Your score was " << player1score << "\r\n";
+		players[0]->get_socket() << "Your opponent's score was " << player2score << "\r\n";
+
+		players[1]->get_socket() << "You have lost" << "\r\n";
+		players[1]->get_socket() << "Your score was " << player2score << "\r\n";
+		players[1]->get_socket() << "Your opponent's score was " << player1score << "\r\n";
+	} else
+	{
+		players[0]->get_socket() << "You have lost" << "\r\n";
+		players[0]->get_socket() << "Your score was " << player1score << "\r\n";
+		players[0]->get_socket() << "Your opponent's score was " << player2score << "\r\n";
+
+		players[1]->get_socket() << "You have won" << "\r\n";
+		players[1]->get_socket() << "Your score was " << player2score << "\r\n";
+		players[1]->get_socket() << "Your opponent's score was " << player1score << "\r\n";
+	}
+
+}
+
+int Game::calculateScore(std::shared_ptr<ClientInfo> player)
+{
+	int score = 0;
+	int numberofbuildings = 0;
+	std::vector<std::string> colors;
+
+	for (auto &building : player->get_buildings())
+	{
+		score += building->get_value();
+		auto currentcolor = building->get_color();
+
+		// if the current color is not in the vector
+		if(std::find(colors.begin(), colors.end(), currentcolor) == colors.end())
+		{
+			colors.push_back(currentcolor);
+		}
+		numberofbuildings++;
+	}
+
+	if(colors.size() >= 5)
+	{
+		score += 3;
+	}
+
+	if (numberofbuildings >= 8)
+	{
+		// hier checken of ie t eerst was
+		score += 2;
+	}
+
+	return score;
 }
 
 void Game::printKingInfo()
