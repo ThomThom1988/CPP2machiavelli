@@ -38,6 +38,7 @@ public:
 	void printBuildings(Socket& socket);
 	void printGold(Socket& socket);
 	int getColorBonus(const std::string color);
+	int getAmountOfBuildings() { return buildings.size(); }
 	std::vector<std::unique_ptr<BuildingCard>> discardCards();
 	std::unique_ptr<BuildingCard> sellCard();
 	std::unique_ptr<BuildingCard> destroyBuilding(std::shared_ptr<ClientInfo> player);

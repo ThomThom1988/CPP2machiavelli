@@ -2,7 +2,8 @@
 
 bool Destroy::useProperty()
 {
-	if(game->canDestroyBuildings(game->getOtherPlayer(game->getCurrentPlayer())))
+	if(game->getCurrentPlayer()->getAmountOfBuildings() >= 8) game->getCurrentPlayer()->get_socket() << "De stad van de tegenstander is vol. Er kan niets worden vernietigd.\r\n";
+	else if(game->canDestroyBuildings(game->getOtherPlayer(game->getCurrentPlayer())))
 	{
 		std::unique_ptr<BuildingCard> card =
 			std::move(game->getOtherPlayer(game->getCurrentPlayer())->destroyBuilding(game->getCurrentPlayer()));
