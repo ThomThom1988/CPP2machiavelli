@@ -38,6 +38,7 @@
     <ClInclude Include="Fileparser.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Properties\Build.h" />
+    <ClInclude Include="Properties\CoinForCard.h" />
     <ClInclude Include="Properties\ColorBonus.h" />
     <ClInclude Include="Properties\Destroy.h" />
     <ClInclude Include="Properties\DrawCards.h" />
@@ -70,6 +71,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Properties\Build.cpp" />
+    <ClCompile Include="Properties\CoinForCard.cpp" />
     <ClCompile Include="Properties\ColorBonus.cpp" />
     <ClCompile Include="Properties\Destroy.cpp" />
     <ClCompile Include="Properties\DrawCards.cpp" />

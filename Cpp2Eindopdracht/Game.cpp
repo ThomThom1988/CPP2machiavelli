@@ -178,8 +178,7 @@ void Game::startTurn(std::string character)
 			break;
 		}
 		turn->setupChoices();
-		//buildings
-
+		turn->addPurpleChoices();
 		turn->executeTurn();
 	}
 }

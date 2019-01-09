@@ -3,6 +3,7 @@
 #include "../Properties/DrawCards.h"
 #include "../Properties/Build.h"
 #include <algorithm>
+#include "../Properties/CoinForCard.h"
 
 void Character::executeTurn()
 {
@@ -53,6 +54,77 @@ void Character::addStandardChoices()
 	properties.push_back(std::make_unique<DrawCards>(*character, *game,2,1));
 	properties.push_back(std::make_unique<DrawCoins>(*character, *game, 2));
 	properties.push_back(std::make_unique<Build>(*character, *game,1));
+}
+
+void Character::addPurpleChoices()
+{
+	std::vector<std::unique_ptr<BuildingCard>> buildings {std::move(game->getCurrentPlayer()->get_buildings())};
+	//laboratorium
+	std::vector<std::unique_ptr<BuildingCard>>::iterator lab =
+		std::find_if(buildings.begin(), buildings.end(),
+			[&](std::unique_ptr<BuildingCard> & obj) { return obj->get_name() == "Laboratorium"; }
+	);
+	if (lab != buildings.end())
+	{
+		properties.push_back(std::make_unique<CoinForCard>(*game));
+	}
+
+	//werkplaats
+	std::vector<std::unique_ptr<BuildingCard>>::iterator work =
+		std::find_if(buildings.begin(), buildings.end(),
+			[&](std::unique_ptr<BuildingCard> & obj) { return obj->get_name() == "Werkplaats"; }
+	);
+	if (work != buildings.end())
+	{
+		if(game->getCurrentPlayer()->get_player().get_gold() >= 3)
+		{
+			properties.push_back(std::make_unique<DrawCards>(*character,*game, 2, 0,3));
+		}
+	}
+	//observatorium
+	std::vector<std::unique_ptr<BuildingCard>>::iterator observe =
+		std::find_if(buildings.begin(), buildings.end(),
+			[&](std::unique_ptr<BuildingCard> & obj) { return obj->get_name() == "Observatorium"; }
+	);
+	if (observe != buildings.end())
+	{
+		disableChoice("Pak 2 kaart(en) en leg er 1 af.");
+		properties.push_back(std::make_unique<DrawCards>(*character, *game, 3, 2));
+	}
+	//bibliotheek
+	std::vector<std::unique_ptr<BuildingCard>>::iterator library =
+		std::find_if(buildings.begin(), buildings.end(),
+			[&](std::unique_ptr<BuildingCard> & obj) { return obj->get_name() == "Bibliotheek"; }
+	);
+	if (library != buildings.end())
+	{
+		disableChoice("Pak 2 kaart(en) en leg er 1 af.");
+		properties.push_back(std::make_unique<DrawCards>(*character, *game, 2, 0));
+	}
+	//school voor magiers
+	std::vector<std::unique_ptr<BuildingCard>>::iterator school =
+		std::find_if(buildings.begin(), buildings.end(),
+			[&](std::unique_ptr<BuildingCard> & obj) { return obj->get_name() == "School voor magiërs"; }
+	);
+	if (school != buildings.end())
+	{
+		std::string color;
+		game->getCurrentPlayer()->get_socket() << "Kies een kleur die jouw school aanneemt";
+		bool colorchoice{ false };
+		while (!colorchoice)
+		{
+			bool inputgotten{false};
+			while (!inputgotten) {
+				inputgotten = game->getCurrentPlayer()->get_socket().readline([&color](std::string input) {
+					color = input;
+				});
+			}
+			if (color == "groen" || color == "geel" || color == "blauw" || color == "rood" || color == "lila") colorchoice = true;
+			else game->getCurrentPlayer()->get_socket() << "Kies uit groen/geel/blauw/rood/lila";
+		}
+		school->get()->set_color(color);
+	}
+	game->getCurrentPlayer()->set_buildings(std::move(buildings));
 }
 
 void Character::disableChoice(const std::string description)

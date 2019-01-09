@@ -9,7 +9,7 @@ public:
 	void executeTurn();
 	virtual void setupChoices() = 0;
 	void addStandardChoices();
-	void disableOtherChoice(const std::string description);
+	void addPurpleChoices();
 	void disableChoice(const std::string description);
 	std::string showChoices();
 protected:

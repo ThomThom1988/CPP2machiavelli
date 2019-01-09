@@ -29,6 +29,8 @@ public:
     const Player& get_player() const { return _player; }
 	std::vector<std::unique_ptr<BuildingCard>> get_hand() { return std::move(hand); }
 	void set_hand(std::vector<std::unique_ptr<BuildingCard>> otherHand) { hand = std::move(otherHand); }
+	std::vector<std::unique_ptr<BuildingCard>> get_buildings() { return std::move(buildings); }
+	void set_buildings(std::vector<std::unique_ptr<BuildingCard>> otherHand) { buildings = std::move(otherHand); }
 	void addCard(std::unique_ptr<BuildingCard> card) { hand.push_back(std::move(card)); }
 	bool addBuilding(int index);
 	void printInfo();
@@ -37,6 +39,7 @@ public:
 	void printGold(Socket& socket);
 	int getColorBonus(const std::string color);
 	std::vector<std::unique_ptr<BuildingCard>> discardCards();
+	std::unique_ptr<BuildingCard> sellCard();
 	std::unique_ptr<BuildingCard> destroyBuilding(std::shared_ptr<ClientInfo> player);
 };
 
