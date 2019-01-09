@@ -26,7 +26,11 @@ bool Build::useProperty()
 						done = true;
 						times--;
 						if (times == 0) setCanUse(false);
-						if (game->getCurrentPlayer()->getAmountOfBuildings() >= 8) game->gameEndsAfterRound();
+						if (game->getCurrentPlayer()->getAmountOfBuildings() >= 8)
+						{
+							game->gameEndsAfterRound();
+							game->getCurrentPlayer()->firstToGet8 = true;
+						}
 					}
 					else{ card->get_player()->get_socket() << "Kies een gebouw in je hand die je kunt betalen.\r\n"; }
 				}

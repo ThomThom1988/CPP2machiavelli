@@ -258,8 +258,10 @@ int Game::calculateScore(std::shared_ptr<ClientInfo> player)
 
 	if (numberofbuildings >= 8)
 	{
-		// hier checken of ie t eerst was
-		score += 2;
+		if (player->firstToGet8)
+			score += 4;
+		else	
+			score += 2;
 	}
 
 	return score;
