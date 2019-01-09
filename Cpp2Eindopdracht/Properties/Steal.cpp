@@ -5,7 +5,7 @@ bool Steal::useProperty()
 	std::string choice;
 	bool done{ false };
 	while (!done) {
-		card->get_player()->get_socket() << "typ de naam van het personage die je wilt bestelen.\r\n";
+		card->get_player()->get_socket() << "\r\ntyp de naam van het personage die je wilt bestelen.\r\n";
 		std::vector<std::string> exceptions{ "Moordenaar","Dief",game->getMurderedCharacter() };
 		game->showCharacterChoices(exceptions);
 		bool inputgotten{ false };
@@ -16,9 +16,9 @@ bool Steal::useProperty()
 			});
 		}
 		if (choice == "Moordenaar" || choice == "Dief" || choice == game->getMurderedCharacter())
-			card->get_player()->get_socket() << "Dit karakter kan je niet bestelen.\r\n";
+			card->get_player()->get_socket() << "\r\nDit karakter kan je niet bestelen.\r\n";
 		else if (!game->characterExists(choice))
-			card->get_player()->get_socket() << "Dit karakter bestaat niet.\r\n";
+			card->get_player()->get_socket() << "\r\nDit karakter bestaat niet.\r\n";
 		else {
 			game->stealFromCharacter(choice);
 			done = true;

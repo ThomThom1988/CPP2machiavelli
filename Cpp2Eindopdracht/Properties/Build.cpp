@@ -5,7 +5,7 @@ bool Build::useProperty()
 	int choice;
 	bool done{ false };
 	while (!done) {
-		card->get_player()->get_socket() << "Kies welk gebouw je wilt bouwen.\r\n";
+		card->get_player()->get_socket() << "\r\nKies welk gebouw je wilt bouwen.\r\n";
 		card->get_player()->printHand();
 		card->get_player()->printGold(card->get_player()->get_socket());
 		game->getCurrentPlayer()->get_socket() << "[annuleren] ga terug naar keuze.\r\n";
@@ -25,14 +25,14 @@ bool Build::useProperty()
 					{
 						done = true;
 						times--;
-						if (times == 0) setCanUse(false);
-						if (game->getCurrentPlayer()->getAmountOfBuildings() >= 8)
+						if (times == 0 && !game->inCheatMode()) setCanUse(false);
+						if (game->getCurrentPlayer()->getAmountOfBuildings() >= 8 && !game->getOtherPlayer(game->getCurrentPlayer())->firstToGet8)
 						{
 							game->gameEndsAfterRound();
 							game->getCurrentPlayer()->firstToGet8 = true;
 						}
 					}
-					else{ card->get_player()->get_socket() << "Kies een gebouw in je hand die je kunt betalen.\r\n"; }
+					else{ card->get_player()->get_socket() << "\r\nKies een gebouw in je hand die je kunt betalen.\r\n"; }
 				}
 			});
 		}

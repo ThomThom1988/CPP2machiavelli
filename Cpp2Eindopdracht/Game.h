@@ -6,6 +6,7 @@
 #include "BuildingCard.h"
 #include "CharacterCard.h"
 
+//stond zo in voorbeeldcode
 namespace machiavelli {
 	const int tcp_port{ 1080 };
 	const std::string prompt{ "machiavelli> " };
@@ -26,6 +27,8 @@ public:
 	int amountOfPlayers() const { return players.size(); }
 	std::shared_ptr<ClientInfo> getCurrentPlayer() const { return players.at(currentPlayer); }
 	std::shared_ptr<ClientInfo> getOtherPlayer(std::shared_ptr<ClientInfo>) const;
+	std::string getState() const { return state; }
+	void setState(const std::string currentState) { state = currentState; }
 	void changePlayer();
 	void startGame();
 	bool allCharactersChosen();
@@ -44,12 +47,15 @@ public:
 	void resetCharacters();
 	void addBuildingToDraw(std::unique_ptr<BuildingCard> card) { buildings.push_back(std::move(card)); }
 	void addCharacterToDraw(std::unique_ptr<CharacterCard> card) { characters.push_back(std::move(card)); }
-	void showCharacterChoices(const std::vector<std::string>& vec = std::vector<std::string>());
+	void showCharacterChoices(const std::vector<std::string>& vec);
+	void showCharacterChoices();
 	bool characterExists(const std::string character);
 	void murderCharacter(const std::string character) { killedCharacter = character; }
 	void stealFromCharacter(const std::string character) { goldStolenCharacter = character; }
 	bool canDestroyBuildings(const std::shared_ptr<ClientInfo> possiblePreacher);
 	std::string getMurderedCharacter() const { return killedCharacter; }
+	bool inCheatMode() const { return cheatmode; }
+	void activateCheatMode() { cheatmode = true; }
 	
 
 private:
@@ -61,7 +67,9 @@ private:
 	int king;
 	std::string killedCharacter;
 	std::string goldStolenCharacter;
+	std::string state;
 	bool gameEnded;
 	bool gameRunning;
+	bool cheatmode = false;
 };
 

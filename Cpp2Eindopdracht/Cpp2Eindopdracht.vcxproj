@@ -49,6 +49,7 @@
     <ClInclude Include="Properties\SwitchHand.h" />
     <ClInclude Include="Properties\SwitchCards.h" />
     <ClInclude Include="Round.h" />
+    <ClInclude Include="Server.h" />
     <ClInclude Include="Socket.h" />
     <ClInclude Include="Sync_queue.h" />
     <ClInclude Include="Properties\Steal.h" />
@@ -83,6 +84,7 @@
     <ClCompile Include="Properties\SwitchCards.cpp" />
     <ClCompile Include="Properties\SwitchHand.cpp" />
     <ClCompile Include="Round.cpp" />
+    <ClCompile Include="Server.cpp" />
     <ClCompile Include="Socket.cpp" />
     <ClCompile Include="Characters\Thief.cpp" />
     <ClCompile Include="throw.cpp" />

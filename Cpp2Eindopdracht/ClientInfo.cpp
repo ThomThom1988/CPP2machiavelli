@@ -33,21 +33,21 @@ void ClientInfo::printInfo()
 
 void ClientInfo::printHand()
 {
-	_socket << "Kaarten in hand:\r\n";
+	_socket << "\r\nKaarten in hand:\r\n";
 	if (hand.empty()) _socket << "Je hebt geen kaarten in jouw hand.\r\n";
 	else for (auto &x : hand) if(x!=nullptr)_socket << *x.get() << "\r\n";
 }
 
 void ClientInfo::printBuildings(Socket& socket)
 {
-	socket << "Gebouwen:\r\n";
+	socket << "\r\nGebouwen:\r\n";
 	if (buildings.empty()) socket << "Er zijn geen gebouwen geplaatst.\r\n";
 	else for (auto &x : buildings) socket << *x.get() << "\r\n";
 }
 
 void ClientInfo::printGold(Socket& socket)
 {
-	socket << "Goudstukken:" << _player.get_gold() << ".\r\n";
+	socket << "\r\nGoudstukken:" << _player.get_gold() << ".\r\n";
 }
 
 int ClientInfo::getColorBonus(const std::string color)
@@ -65,7 +65,7 @@ std::vector<std::unique_ptr<BuildingCard>> ClientInfo::discardCards()
 	bool stop{ false };
 	while (!stop)
 	{
-		_socket << "kies een kaart om af te leggen.\r\n";
+		_socket << "\r\nkies een kaart om af te leggen.\r\n";
 		int index = 0;
 		for (auto &x : hand) {
 			if (x != nullptr) {
@@ -102,7 +102,7 @@ std::vector<std::unique_ptr<BuildingCard>> ClientInfo::discardCards()
 				}
 				catch (...)
 				{
-					_socket << "kies een juiste waarde.\r\n" << machiavelli::prompt;
+					_socket << "\r\nkies een juiste waarde.\r\n" << machiavelli::prompt;
 				}
 			}
 			else {
@@ -119,7 +119,7 @@ std::unique_ptr<BuildingCard> ClientInfo::sellCard()
 	bool stop{ false };
 	while (!stop)
 	{
-		_socket << "kies een kaart om af te leggen.\r\n";
+		_socket << "\r\nkies een kaart om af te leggen.\r\n";
 		int index = 0;
 		for (auto &x : hand) {
 			if (x != nullptr) {
@@ -156,7 +156,7 @@ std::unique_ptr<BuildingCard> ClientInfo::sellCard()
 				}
 				catch (...)
 				{
-					_socket << "kies een juiste waarde.\r\n" << machiavelli::prompt;
+					_socket << "\r\nkies een juiste waarde.\r\n" << machiavelli::prompt;
 				}
 			}
 			else {
@@ -174,7 +174,7 @@ std::unique_ptr<BuildingCard> ClientInfo::destroyBuilding(std::shared_ptr<Client
 	bool stop{ false };
 	while (!stop)
 	{
-		player->get_socket() << "kies een kaart om te vernietigen.\r\n";
+		player->get_socket() << "\r\nkies een kaart om te vernietigen.\r\n";
 		int index = 0;
 		for (auto &x : buildings) {
 			if (x != nullptr) {
@@ -202,11 +202,11 @@ std::unique_ptr<BuildingCard> ClientInfo::destroyBuilding(std::shared_ptr<Client
 					chosenIndex = std::stoi(chosenIndexString);
 					if(player->get_player().get_gold() < (buildings.at(chosenIndex)->get_value() -1))
 					{
-						player->get_socket() << "je hebt niet genoeg goudstukken om deze kaart te vernietigen.\r\n";
+						player->get_socket() << "\r\nje hebt niet genoeg goudstukken om deze kaart te vernietigen.\r\n";
 					}
 					else if (buildings.at(chosenIndex)->get_name() == "Kerker")
 					{
-						player->get_socket() << "je mag de kerker niet vernietigen.\r\n";
+						player->get_socket() << "\r\nje mag de kerker niet vernietigen.\r\n";
 					}
 					else
 					{
@@ -221,9 +221,9 @@ std::unique_ptr<BuildingCard> ClientInfo::destroyBuilding(std::shared_ptr<Client
 							if(graveyard != hand.end())
 							{
 								std::string yesorno;
-								_socket << "Jouw " << buildings.at(chosenIndex)->get_name() << " wordt verwoest door de condottiere, ";
+								_socket << "\r\nJouw " << buildings.at(chosenIndex)->get_name() << " wordt verwoest door de condottiere, ";
 								_socket << "wil je deze voor 1 goudstuk terug in jouw hand steken?[y/n]\r\n" << machiavelli::prompt;
-								player->get_socket() << "De tegenstander heeft de kans om het gebouw terug in de hand te stoppen.\r\n";								
+								player->get_socket() << "\r\nDe tegenstander heeft de kans om het gebouw terug in de hand te stoppen.\r\n";								
 								bool yesornochoice{ false };
 								while(!yesornochoice)
 								{
@@ -238,9 +238,9 @@ std::unique_ptr<BuildingCard> ClientInfo::destroyBuilding(std::shared_ptr<Client
 								if (yesorno == "y")
 								{
 									graveyardUsed = true;
-									player->get_socket() << "De tegenstander heeft de kaart teruggepakt.\r\n";
+									player->get_socket() << "\r\nDe tegenstander heeft de kaart teruggepakt.\r\n";
 								}
-								else player->get_socket() << "De tegenstander heeft de kaart niet teruggepakt.\r\n";
+								else player->get_socket() << "\r\nDe tegenstander heeft de kaart niet teruggepakt.\r\n";
 							}
 
 						}
@@ -261,7 +261,7 @@ std::unique_ptr<BuildingCard> ClientInfo::destroyBuilding(std::shared_ptr<Client
 				}
 				catch (...)
 				{
-					player->get_socket() << "kies een juiste waarde.\r\n" << machiavelli::prompt;
+					player->get_socket() << "\r\nkies een juiste waarde.\r\n" << machiavelli::prompt;
 				}
 			}
 			else {

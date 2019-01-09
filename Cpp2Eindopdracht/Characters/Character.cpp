@@ -11,7 +11,7 @@ void Character::executeTurn()
 	bool done{ false };
 	while (!done) {
 		character->get_player()->printInfo();
-		character->get_player()->get_socket() << "Je bent nu de " << character->get_name() << ".\r\n" << showChoices();
+		character->get_player()->get_socket() << "\r\nJe bent nu de " << character->get_name() << ".\r\n" << showChoices();
 		bool nextChoise{ false };
 		while (!nextChoise)
 		{
@@ -33,14 +33,15 @@ void Character::executeTurn()
 							if (properties.at(choice)->canUse())
 							{
 								properties.at(choice)->useProperty();
+								if (!game->inCheatMode())
 								if (!properties.at(choice)->getConnectedDescription().empty()) disableChoice(properties.at(choice)->getConnectedDescription());
 							}
-							else character->get_player()->get_socket() << "kies een juiste waarde.\r\n";
+							else character->get_player()->get_socket() << "\r\nkies een juiste waarde.\r\n";
 							
 						}
 						catch (...)
 						{
-							character->get_player()->get_socket() << "kies een juiste waarde.\r\n";
+							character->get_player()->get_socket() << "r\nkies een juiste waarde.\r\n";
 						}
 						
 					}
@@ -109,7 +110,7 @@ void Character::addPurpleChoices()
 	if (school != buildings.end())
 	{
 		std::string color;
-		game->getCurrentPlayer()->get_socket() << "Kies een kleur die jouw school aanneemt";
+		game->getCurrentPlayer()->get_socket() << "\r\nKies een kleur die jouw school aanneemt";
 		bool colorchoice{ false };
 		while (!colorchoice)
 		{
@@ -120,7 +121,7 @@ void Character::addPurpleChoices()
 				});
 			}
 			if (color == "groen" || color == "geel" || color == "blauw" || color == "rood" || color == "lila") colorchoice = true;
-			else game->getCurrentPlayer()->get_socket() << "Kies uit groen/geel/blauw/rood/lila";
+			else game->getCurrentPlayer()->get_socket() << "\r\nKies uit groen/geel/blauw/rood/lila";
 		}
 		school->get()->set_color(color);
 	}
@@ -142,7 +143,7 @@ void Character::disableChoice(const std::string description)
 std::string Character::showChoices()
 {
 	std::string result;
-	result += "opties:\r\n";
+	result += "\r\nopties:\r\n";
 	int i{0};
 	for (auto &property : properties)
 	{
