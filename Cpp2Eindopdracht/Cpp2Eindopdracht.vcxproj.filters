@@ -114,6 +114,9 @@
     <ClInclude Include="Properties\SwitchCards.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Properties\CoinForCard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -204,6 +207,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Properties\Destroy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Properties\CoinForCard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
