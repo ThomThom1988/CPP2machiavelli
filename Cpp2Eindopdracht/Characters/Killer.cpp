@@ -3,5 +3,6 @@
 
 void Killer::setupChoices()
 {
+	addStandardChoices();
 	properties.push_back(std::make_unique<Murder>(*character, *game));
 }

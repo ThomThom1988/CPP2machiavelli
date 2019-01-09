@@ -3,5 +3,6 @@
 
 void Thief::setupChoices()
 {
+	addStandardChoices();
 	properties.push_back(std::make_unique<Steal>(*character, *game));
 }

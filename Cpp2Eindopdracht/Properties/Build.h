@@ -1,17 +1,21 @@
 #pragma once
 #include "../CardProperty.h"
+#include "../Game.h"
 
 class Build :
 	public CardProperty
 {
 public:
-	Build() : times{1}
+	Build(CharacterCard& characterCard, Game& currentGame, const int amount) : times{amount}, game{ &currentGame }, card{ &characterCard }
 	{
 		description = "Bouw een gebouw en betaal de waarde";
+		canuse = true;
 	}
 	~Build() {};
-	bool useProperty() override { return true; };
+	bool useProperty() override;
 	void setTimes(const int amountOfTimes) { times = amountOfTimes; }
 private:
 	int times;
+	Game *game;
+	CharacterCard *card;
 };

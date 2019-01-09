@@ -7,15 +7,15 @@ class Murder :
 	public CardProperty
 {
 public:
-	Murder(CharacterCard& characterCard, Game& currentGame)
+	Murder(CharacterCard& characterCard, Game& currentGame) : card{ &characterCard }, game { &currentGame }
 	{
 		description = "Kies een karakter die je deze ronde wilt vermoorden.";
-		card = &characterCard;
-		game = &currentGame;
+		canuse = true;
 	}
 	~Murder(){};
 	bool useProperty() override;
-	Game *game;
+private:
 	CharacterCard *card;
+	Game *game;	
 };
 
