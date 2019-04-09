@@ -11,7 +11,7 @@ public:
 	virtual bool useProperty() = 0;
 	bool canUse() const { return canuse; }
 	void setCanUse(const bool canUse) { canuse = canUse; }
-	std::string getConnectedDescription() { return connectedDescription; }
+	std::string getConnectedDescription() const{ return connectedDescription; }
 protected:
 	bool canuse;
 	std::string description;

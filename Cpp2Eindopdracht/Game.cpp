@@ -1,6 +1,5 @@
 #include "Game.h"
 #include <algorithm>
-#include <random>
 #include <iterator>
 #include "Characters/Killer.h"
 #include "Characters/Thief.h"
@@ -26,12 +25,13 @@ std::shared_ptr<ClientInfo> Game::getOtherPlayer(std::shared_ptr<ClientInfo> pla
 void Game::changePlayer()
 {
 	players.at(currentPlayer)->get_socket().write("\r\nJe tegenstander is nu aan de beurt.\r\n");
+	players.at(currentPlayer)->get_socket();
 	currentPlayer = currentPlayer == 0 ? 1 : 0;
 }
 
 void Game::startGame()
 {
-	std::shuffle(buildings.begin(), buildings.end(), std::default_random_engine{});
+	std::shuffle(buildings.begin(), buildings.end(), engine);
 	for (auto &x : players) {
 		
 		auto other = getOtherPlayer(x);
@@ -58,7 +58,7 @@ void Game::startGame()
 		<< machiavelli::prompt;
 }
 
-bool Game::allCharactersChosen()
+bool Game::allCharactersChosen() const
 {
 	bool result = true;
 	CharacterCard card;
@@ -69,11 +69,13 @@ bool Game::allCharactersChosen()
 
 void Game::roundSetup()
 {
+	focus = true;
 	if (inCheatMode()) cheatSetup();
 	setState("setup started");
 	currentRound++;
-	std::shuffle(characters.begin(), characters.end(), std::default_random_engine{});
+	std::shuffle(characters.begin(), characters.end(), engine);
 	discardCharacter(characters[0]->get_value());
+	bool kingsChoice = false;
 
 	//karakter keuzes hier
 	while (!allCharactersChosen())
@@ -94,7 +96,7 @@ void Game::roundSetup()
 			if(!done) players[currentPlayer]->get_socket() << "\r\nkies een juiste waarde.\r\n" << machiavelli::prompt;
 		}	
 
-		if (!allCharactersChosen())
+		if (!allCharactersChosen() && kingsChoice == true)
 		{
 			players[currentPlayer]->get_socket().write("\r\nkies een karakter om weg te leggen: \r\n");
 			showCharacterChoices();
@@ -110,8 +112,9 @@ void Game::roundSetup()
 				done = discardCharacter(choice);
 				if (!done) players[currentPlayer]->get_socket() << "\r\nkies een juiste waarde.\r\n" << machiavelli::prompt;
 			}
-			changePlayer();
-		}		
+		}
+		kingsChoice = true;
+		if (!allCharactersChosen()) changePlayer();
 	}
 	setState("setup");
 	currentPlayer = king;
@@ -126,6 +129,7 @@ void Game::roundSetup()
 		<< "[quit] stap uit het spel.\r\n"
 		<< "[quit_server] stop de server.\r\n"
 		<< machiavelli::prompt;
+	focus = false;
 }
 
 void Game::cheatSetup()
@@ -223,6 +227,7 @@ void Game::startTurn(std::string character)
 
 void Game::startRound()
 {
+	focus = true;
 	setState("round started");
 	getOtherPlayer(players[currentPlayer])->get_socket() << "\r\nJe tegenstander is de ronde begonnen\r\n";
 	std::sort(characters.begin(), characters.end(), [](std::unique_ptr<CharacterCard> & a, std::unique_ptr<CharacterCard> & b) {return a->get_value() < b->get_value(); });
@@ -232,10 +237,11 @@ void Game::startRound()
 	if (gameEnded)
 	{
 		for (auto &x : players) x->get_socket() << "\r\nHet spel is afgelopen, de scores worden nu uitgerekend.\r\n";
+		focus = false;
 		endGame();
 	}
 	else {
-		for (auto &x : players) x->get_socket() << "\r\nHet spel is afgelopen, de koning start de nieuwe ronde op.\r\n";
+		for (auto &x : players) x->get_socket() << "\r\nDeze ronde is afgelopen, de koning start de nieuwe ronde op.\r\n";
 		setState("start");
 		currentPlayer = king;
 		players[currentPlayer]->get_socket() << "Wat wil je doen? : \r\n\r\n"
@@ -249,6 +255,8 @@ void Game::startRound()
 			<< "[quit] stap uit het spel.\r\n"
 			<< "[quit_server] stop de server.\r\n"
 			<< machiavelli::prompt;
+		resetCharacters();
+		focus = false;
 	}
 }
 
@@ -280,14 +288,14 @@ void Game::endGame()
 		players[0]->get_socket() << "De score was " << player1score << "\r\n";
 		players[0]->get_socket() << "De score van de tegenstander was " << player2score << "\r\n";
 
-		players[1]->get_socket() << "\r\nou have won" << "\r\n";
+		players[1]->get_socket() << "\r\nJe hebt gewonnen" << "\r\n";
 		players[1]->get_socket() << "De score was " << player2score << "\r\n";
 		players[1]->get_socket() << "De score van de tegenstander was " << player1score << "\r\n";
 	}
 
 }
 
-int Game::calculateScore(std::shared_ptr<ClientInfo> player)
+int Game::calculateScore(const std::shared_ptr<ClientInfo> player)
 {
 	int score = 0;
 	int numberofbuildings = 0;
@@ -344,7 +352,7 @@ int Game::calculateScore(std::shared_ptr<ClientInfo> player)
 	return score;
 }
 
-void Game::printKingInfo()
+void Game::printKingInfo() const
 {
 	auto kingsname = players.at(king)->get_player().get_name();
 	players.at(king)->get_socket().write("\r\nJe bent de koning.\r\n\r\n");
@@ -423,7 +431,7 @@ bool Game::chooseCharacter(const int character, const std::shared_ptr<ClientInfo
 		std::find_if(characters.begin(), characters.end(),
 			[&](std::unique_ptr<CharacterCard> & obj) { return obj->get_value() == character; }
 	);
-	if (object->get() == nullptr) return false;
+	if (object == characters.end()) return false;
 	if (object->get()->is_discarded()) return false;
 	object->get()->set_Player(player);
 	object->get()->set_discarded(true);
@@ -436,7 +444,7 @@ bool Game::discardCharacter(const int discardCharacter)
 		std::find_if(characters.begin(), characters.end(),
 			[&](std::unique_ptr<CharacterCard> & obj) { return obj->get_value() == discardCharacter; }
 	);
-	if (object->get() == nullptr) return false;
+	if (object == characters.end()) return false;
 	if (object->get()->is_discarded()) return false;
 	object->get()->set_discarded(true);
 	return true;
@@ -451,20 +459,24 @@ void Game::resetCharacters()
 	}
 }
 
-void Game::showCharacterChoices(const std::vector<std::string>& exceptions)
+void Game::showCharacterChoices(const std::vector<std::string>& exceptions) const
 {
+	//int index = 0;
 	for(auto &character : characters)
 	{
 		auto found = std::find(exceptions.begin(), exceptions.end(), character->get_name());
+
 		if (found == exceptions.end())
 		{
+			//players[currentPlayer]->get_socket() << "[" << std::to_string(index) << "] ";
 			players[currentPlayer]->get_socket() << *character << "\r\n";
-		}	
+		}
+		//index++;
 	}
 	players[currentPlayer]->get_socket() << machiavelli::prompt;
 }
 
-void Game::showCharacterChoices()
+void Game::showCharacterChoices() const
 {
 	for (auto &character : characters)
 	{

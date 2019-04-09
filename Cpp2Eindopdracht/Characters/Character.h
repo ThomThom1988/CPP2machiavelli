@@ -11,7 +11,7 @@ public:
 	void addStandardChoices();
 	void addPurpleChoices();
 	void disableChoice(const std::string description);
-	std::string showChoices();
+	std::string showChoices() const;
 protected:
 	std::vector<std::unique_ptr<CardProperty>> properties;
 	CharacterCard* character;

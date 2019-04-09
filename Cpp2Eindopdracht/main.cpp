@@ -6,9 +6,11 @@
 //  Revised by Jeroen de Haas on 22/11/2016
 //  Copyright (c) 2014 Avans Hogeschool, 's-Hertogenbosch. All rights reserved.
 //
+
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
+#include <stdlib.h>
 #include <thread>
 #include <iostream>
 #include <exception>
@@ -64,10 +66,7 @@ void consume_command(Game *game) // runs in its own thread
 						if (game->getState() == "start" && command.get_cmd() == "cheatmodus") game->cheatSetup();
 						if (game->getState() == "setup" && command.get_cmd() == "start ronde") game->startRound();
 	                }
-					else if (game->getCurrentPlayer() != clientInfo)
-					{
-						client << "\r\nDe tegenstander is aan de beurt.\r\n";
-					}					
+										
 					else client << "\r\nOpdracht niet herkent.\r\n";
                     
 
@@ -134,34 +133,40 @@ void handle_client(Socket client, Game *game) // this function runs in a separat
 			game->startGame();
 	    }
         while (running) { // game loop
-            try {
-                // read first line of request
-                std::string cmd;
-                if (socket.readline([&cmd,&client_info](std::string input) { cmd=input; })) {
-                    cerr << '[' << socket.get_dotted_ip() << " (" << socket.get_socket() << ") " << player.get_name() << "] " << cmd << "\r\n";
+			if (!game->gameHasFocus())
+			{
+				try {
 
-                    if (cmd == "quit") {
-                        socket.write("\r\nHoudoe!\r\n");
-						if(game->amountOfPlayers() >= 2)
-						{
-							auto otherPlayer = game->getOtherPlayer(client_info);
-							otherPlayer.get()->get_socket() << "\r\n"<< client_info->get_player().get_name() << " heeft het spel verlaten.\n" << machiavelli::prompt;
-						}						
-                        break; // out of game loop, will end this thread and close connection
-                    }
-                    else if (cmd == "quit_server") {
-                        running = false;
-                    }
+					// read first line of request
 
-                    ClientCommand command {cmd, client_info};
-                    queue.put(command);
-                };
+					std::string cmd;
+					if (socket.readline([&cmd, &client_info](std::string input) { cmd = input; })) {
+						cerr << '[' << socket.get_dotted_ip() << " (" << socket.get_socket() << ") " << player.get_name() << "] " << cmd << "\r\n";
 
-            } catch (const exception& ex) {
-                socket << "ERROR: " << ex.what() << "\r\n";
-            } catch (...) {
-                socket.write("ERROR: something went wrong during handling of your request. Sorry!\r\n");
-            }
+						if (cmd == "quit") {
+							socket.write("\r\nHoudoe!\r\n");
+							if (game->amountOfPlayers() >= 2)
+							{
+								auto otherPlayer = game->getOtherPlayer(client_info);
+								otherPlayer.get()->get_socket() << "\r\n" << client_info->get_player().get_name() << " heeft het spel verlaten.\n" << machiavelli::prompt;
+							}
+							break; // out of game loop, will end this thread and close connection
+						}
+						else if (cmd == "quit_server") {
+							running = false;
+						}
+							ClientCommand command{ cmd, client_info };
+							queue.put(command);						
+					};
+				}
+				catch (const exception& ex) {
+					socket << "ERROR: " << ex.what() << "\r\n";
+				}
+				catch (...) {
+					socket.write("ERROR: something went wrong during handling of your request. Sorry!\r\n");
+				}
+			}
+
         }
         // close weg
     } 
@@ -209,7 +214,6 @@ void start ()
 int main(int argc, const char * argv[])
 {    
 	start();
-	_CrtDumpMemoryLeaks();
     return 0;
 }
 

@@ -140,7 +140,7 @@ void Character::disableChoice(const std::string description)
 }
 
 
-std::string Character::showChoices()
+std::string Character::showChoices() const
 {
 	std::string result;
 	result += "\r\nopties:\r\n";

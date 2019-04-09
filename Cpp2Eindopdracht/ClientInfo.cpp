@@ -1,6 +1,15 @@
 #include "ClientInfo.h"
 #include "Game.h"
 #include <algorithm>
+#ifdef _DEBUG
+#define DEBUG_CLIENTBLOCK new( _CLIENT_BLOCK, __FILE__, __LINE__)
+#else
+#define DEBUG_CLIENTBLOCK
+#endif // _DEBUG
+
+#ifdef _DEBUG
+#define new DEBUG_CLIENTBLOCK
+#endif
 
 bool ClientInfo::addBuilding(int index)
 {
@@ -35,7 +44,16 @@ void ClientInfo::printHand()
 {
 	_socket << "\r\nKaarten in hand:\r\n";
 	if (hand.empty()) _socket << "Je hebt geen kaarten in jouw hand.\r\n";
-	else for (auto &x : hand) if(x!=nullptr)_socket << *x.get() << "\r\n";
+	else {
+		int index = 0;
+		for (auto &x : hand) {
+			if (x != nullptr) {
+				_socket << "[" << std::to_string(index) << "] ";
+				_socket << *x.get() << "\r\n";
+			}
+			index++;
+		}
+	}
 }
 
 void ClientInfo::printBuildings(Socket& socket)
@@ -210,6 +228,7 @@ std::unique_ptr<BuildingCard> ClientInfo::destroyBuilding(std::shared_ptr<Client
 					}
 					else
 					{
+						_socket << "\r\nJouw " << buildings.at(chosenIndex)->get_name() << " wordt verwoest door de condottiere, ";
 						//kerkhof implementatie
 						if (_player.get_gold() > 0)
 						{
@@ -221,7 +240,6 @@ std::unique_ptr<BuildingCard> ClientInfo::destroyBuilding(std::shared_ptr<Client
 							if(graveyard != hand.end())
 							{
 								std::string yesorno;
-								_socket << "\r\nJouw " << buildings.at(chosenIndex)->get_name() << " wordt verwoest door de condottiere, ";
 								_socket << "wil je deze voor 1 goudstuk terug in jouw hand steken?[y/n]\r\n" << machiavelli::prompt;
 								player->get_socket() << "\r\nDe tegenstander heeft de kans om het gebouw terug in de hand te stoppen.\r\n";								
 								bool yesornochoice{ false };
